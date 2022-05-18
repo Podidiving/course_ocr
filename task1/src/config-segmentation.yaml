@@ -1,0 +1,30 @@
+datamodule:
+  dataset_path: /notebook/temp/midv500_compressed
+  valid:
+    batch_size: 16
+    num_workers: 10
+  train:
+    batch_size: 8
+    num_workers: 8
+
+module:
+  arch: deeplabv3plus
+  encoder_name: timm-efficientnet-b2
+  in_channels: 3
+  classes: 1
+  monitor_metric: val_loss
+  monitor_mode: min
+
+trainer:
+  gpus: -1
+  accelerator: "gpu"
+  precision: 32
+  benchmark: True
+  max_epochs: 50
+#  fast_dev_run: True
+  accumulate_grad_batches: 2
+
+
+logging:
+  logdir: deeplabv3plus
+  experiment_name: segmentation
