@@ -4,6 +4,7 @@ from typing import Any, Dict
 
 from .margin import ArcMarginProduct
 from .model import ArcFace
+from .focal import FocalLoss
 
 
 class LightningModel(pl.LightningModule):
@@ -14,7 +15,11 @@ class LightningModel(pl.LightningModule):
         self.margin = ArcMarginProduct(
             config["feature_size"], config["num_classes"]
         )
-        self.criterion = torch.nn.CrossEntropyLoss()
+        self.criterion = (
+            FocalLoss()
+            if config.get("use_focal_loss", False)
+            else torch.nn.CrossEntropyLoss()
+        )
 
         self.save_hyperparameters(config)
 
@@ -51,15 +56,15 @@ class LightningModel(pl.LightningModule):
 
     def configure_optimizers(self):
         params = list(self.model.parameters()) + list(self.margin.parameters())
-        opt = torch.optim.Adam(params, lr=3e-4)
-        sch = torch.optim.lr_scheduler.ReduceLROnPlateau(
-            opt,
-            mode=self.hparams.monitor_mode,
+        opt_name = self.hparams.optimizer.name
+        opt_params = self.hparams.optimizer.params
+        opt = torch.optim.__dict__[opt_name](
+            params, **opt_params
         )
+        sch = torch.optim.lr_scheduler.StepLR(opt, step_size=3, gamma=0.5)
         return {
             "optimizer": opt,
             "lr_scheduler": {
                 "scheduler": sch,
-                "monitor": self.hparams.monitor_metric,
             },
         }
