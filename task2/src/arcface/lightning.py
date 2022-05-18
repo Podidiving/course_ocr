@@ -61,7 +61,14 @@ class LightningModel(pl.LightningModule):
         opt = torch.optim.__dict__[opt_name](
             params, **opt_params
         )
-        sch = torch.optim.lr_scheduler.StepLR(opt, step_size=3, gamma=0.5)
+        if "lr_scheduler" in self.hparams:
+            lr_params = self.hparams.lr_scheduler["params"]
+        else:
+            lr_params = {
+                "step_size": 3,
+                "gamma": 0.1,
+            }
+        sch = torch.optim.lr_scheduler.StepLR(opt, **lr_params)
         return {
             "optimizer": opt,
             "lr_scheduler": {
