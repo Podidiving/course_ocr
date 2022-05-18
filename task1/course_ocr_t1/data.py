@@ -29,7 +29,7 @@ class DataItem:
         return Image.open(self.img_path)
 
     @property
-    def gt_data(self)->dict:
+    def gt_data(self) -> dict:
         if hasattr(self, '_gt_data'):
             return self._gt_data
 
@@ -44,7 +44,7 @@ class DataItem:
         return self._gt_data
 
     @property
-    def quadrangle(self)->np.array:
+    def quadrangle(self) -> np.array:
         gt_data = self.gt_data
         if 'quad' in gt_data:
             quad = np.array(self.gt_data['quad']).astype(float)
@@ -65,7 +65,7 @@ class DataItem:
         Для разметки 'шаблона', т.е. идеально кропнутого изображения, лежащего в корне,
         этих дданных нет, потому что quad = [(0,0), (0,w), (h,w), (0,h)].
         """
-        exists =  (self.gt_path.exists()) and (self.img_path.exists())
+        exists = (self.gt_path.exists()) and (self.img_path.exists())
         return exists and ('quad' in self.gt_data)
 
     def show(self, quad01=None):
