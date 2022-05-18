@@ -1,3 +1,12 @@
+# Solution
+
+1. установить пакет `course_ocr/task1`: `pip install -e .`
+2. установить зависимости: `pip install -r src/requirements.txt`
+3. изменить параметры в `src/config-segmentation.yaml` (поставить валидный `dataset_path`: путь до корня с данными)
+4. additional: можно уменьшить `batch_size` (в этом случае стоит увеличить `accumulate_grad_batches`)
+5. запустить обучение: `python3 -m src.segmentation -d src/config-segmentation.yaml`
+6. инфер и дамп `pred.json` находится в ноутбуке `infer.ipynb` (там необходимо заменить переменную `ckpt_path` на актуальную - путь до чекпоинта с моделью; также можно уменьшить `batch_size`)
+
 # Задание 1: кроп документов
 ## Описание
 В этом разделе находятся материалы первого домашнего задания: пакет с кодом для работы с данными, вычислением метрик и пример baseline решения.
