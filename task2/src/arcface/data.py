@@ -25,7 +25,18 @@ def get_pre_transforms(h: int, w: int):
 
 
 def get_test_augmentation(h: int, w: int):
-    return albu.Compose(get_pre_transforms(h, w))
+    return albu.Compose(
+        [
+            albu.PadIfNeeded(
+                min_height=h,
+                min_width=w,
+                always_apply=True,
+                border_mode=0,
+                value=255,
+            ),
+            albu.CenterCrop(height=h, width=w, always_apply=True),
+        ]
+    )
 
 
 def get_training_augmentation(h: int, w: int):
@@ -127,7 +138,7 @@ class TrainDatamodule(pl.LightningDataModule):
             os.path.join(self.config["dataset_path"], "*/*.png")
         )
         self.train, self.valid = model_selection.train_test_split(
-            all_paths, test_size=0.2, random_state=42
+            all_paths, test_size=0.1, random_state=42
         )
         self.valid = np.array(self.valid)
         self.train = np.array(self.train)
