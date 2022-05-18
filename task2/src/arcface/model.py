@@ -4,9 +4,7 @@ from torch import nn
 
 
 class Head(nn.Module):
-    def __init__(self,
-                 in_channels: int = 512,
-                 feature_size: int = 512):
+    def __init__(self, in_channels: int = 512, feature_size: int = 512):
         super().__init__()
         self._dropout = nn.Dropout()
         self._linear = nn.Linear(in_channels, feature_size)
@@ -33,7 +31,14 @@ class ArcFace(nn.Module):
         super().__init__()
         self.model = timm.create_model(backbone_name, pretrained=True)
         weight = self.model.conv1.weight.data.mean(1)[:, None]
-        self.model.conv1 = torch.nn.Conv2d(1, 64, kernel_size=(7,7), stride=(2,2), padding=(3,3), bias=False)
+        self.model.conv1 = torch.nn.Conv2d(
+            1,
+            64,
+            kernel_size=(7, 7),
+            stride=(2, 2),
+            padding=(3, 3),
+            bias=False,
+        )
         self.model.conv1.data = weight
 
         self.pool = nn.AdaptiveMaxPool2d(1)

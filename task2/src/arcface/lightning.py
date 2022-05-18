@@ -11,13 +11,15 @@ class LightningModel(pl.LightningModule):
         super().__init__()
 
         self.model = ArcFace(config["backbone"], config["feature_size"])
-        self.margin = ArcMarginProduct(config["feature_size"], config["num_classes"])
+        self.margin = ArcMarginProduct(
+            config["feature_size"], config["num_classes"]
+        )
         self.criterion = torch.nn.CrossEntropyLoss()
 
         self.save_hyperparameters(config)
 
     def forward_features(self, x: torch.Tensor):
-        x = (x.float() - 127.5) / 255.
+        x = (x.float() - 127.5) / 255.0
         return self.model(x)
 
     def infer(self, x: torch.Tensor) -> torch.Tensor:
@@ -25,8 +27,8 @@ class LightningModel(pl.LightningModule):
         return self.margin(features)
 
     def _step(self, batch, stage: str):
-        image = batch['image']
-        label = batch['label']
+        image = batch["image"]
+        label = batch["label"]
 
         feature = self.forward_features(image)
         prediction = self.margin(feature, label)

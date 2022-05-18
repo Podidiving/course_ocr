@@ -14,7 +14,11 @@ from loguru import logger
 def get_pre_transforms(h: int, w: int):
     return [
         albu.PadIfNeeded(
-            min_height=h, min_width=w, always_apply=True, border_mode=0, value=255,
+            min_height=h,
+            min_width=w,
+            always_apply=True,
+            border_mode=0,
+            value=255,
         ),
         albu.RandomCrop(height=h, width=w, always_apply=True),
     ]
@@ -119,18 +123,20 @@ class TrainDatamodule(pl.LightningDataModule):
         self.valid_dataset = None
 
     def prepare_data(self) -> None:
-        all_paths = glob.glob(os.path.join(self.config["dataset_path"], "*/*.png"))
+        all_paths = glob.glob(
+            os.path.join(self.config["dataset_path"], "*/*.png")
+        )
         self.train, self.valid = model_selection.train_test_split(
-            all_paths,
-            test_size=0.2,
-            random_state=42
+            all_paths, test_size=0.2, random_state=42
         )
         self.valid = np.array(self.valid)
         self.train = np.array(self.train)
 
     def setup(self, stage: Optional[str] = None) -> None:
         self.train_dataset = Dataset(self.train, self.config["encoder"])
-        self.valid_dataset = Dataset(self.valid, self.config["encoder"], is_test=True)
+        self.valid_dataset = Dataset(
+            self.valid, self.config["encoder"], is_test=True
+        )
 
         logger.info("Train stat: {}", len(self.train_dataset))
         logger.info("Valid stat: {}", len(self.valid_dataset))

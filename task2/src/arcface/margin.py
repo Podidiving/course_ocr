@@ -11,13 +11,20 @@ import math
 
 class ArcMarginProduct(nn.Module):
     r"""https://paperswithcode.com/method/arcface :
-        Args:
-            in_features: size of each input sample
-            out_features: size of each output sample
-            s: norm of input feature
-            m: margin
-        """
-    def __init__(self, in_features: int, out_features: int, s: float = 30.0, m: float = 0.50):
+    Args:
+        in_features: size of each input sample
+        out_features: size of each output sample
+        s: norm of input feature
+        m: margin
+    """
+
+    def __init__(
+        self,
+        in_features: int,
+        out_features: int,
+        s: float = 30.0,
+        m: float = 0.50,
+    ):
         super(ArcMarginProduct, self).__init__()
         self.in_features = in_features
         self.out_features = out_features
@@ -31,7 +38,9 @@ class ArcMarginProduct(nn.Module):
         self.th = math.cos(math.pi - m)
         self.mm = math.sin(math.pi - m) * m
 
-    def forward(self, input_: torch.Tensor, label: Optional[torch.Tensor] = None) -> torch.Tensor:
+    def forward(
+        self, input_: torch.Tensor, label: Optional[torch.Tensor] = None
+    ) -> torch.Tensor:
         # --------------------------- cos(theta) & phi(theta) ---------------------------
         cosine = F.linear(F.normalize(input_), F.normalize(self.weight))
         if label is None:
