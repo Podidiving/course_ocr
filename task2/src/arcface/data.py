@@ -4,6 +4,7 @@ import cv2
 import pickle
 from sklearn import model_selection
 import torch
+from torch.utils.data import DataLoader
 import pytorch_lightning as pl
 from typing import Any, Dict, Tuple, Optional
 import numpy as np
@@ -126,8 +127,7 @@ class Dataset(torch.utils.data.Dataset):
 class TrainDatamodule(pl.LightningDataModule):
     def __init__(self, config: Dict[str, Any]):
         super().__init__()
-        self.config = config
-        self.config = config
+        self.save_hyperparameters(config)
         self.train = None
         self.valid = None
         self.train_dataset = None
@@ -135,7 +135,7 @@ class TrainDatamodule(pl.LightningDataModule):
 
     def prepare_data(self) -> None:
         all_paths = glob.glob(
-            os.path.join(self.config["dataset_path"], "*/*.png")
+            os.path.join(self.hparams.dataset_path, "*/*.png")
         )
         self.train, self.valid = model_selection.train_test_split(
             all_paths, test_size=0.1, random_state=42
@@ -144,31 +144,31 @@ class TrainDatamodule(pl.LightningDataModule):
         self.train = np.array(self.train)
 
     def setup(self, stage: Optional[str] = None) -> None:
-        self.train_dataset = Dataset(self.train, self.config["encoder"])
+        self.train_dataset = Dataset(self.train, self.hparams.encoder)
         self.valid_dataset = Dataset(
-            self.valid, self.config["encoder"], is_test=True
+            self.valid, self.hparams.encoder, is_test=True
         )
 
         logger.info("Train stat: {}", len(self.train_dataset))
         logger.info("Valid stat: {}", len(self.valid_dataset))
 
     def val_dataloader(self):
-        dataloader = torch.utils.data.DataLoader(
+        dataloader = DataLoader(
             self.valid_dataset,
-            batch_size=self.config["valid"]["batch_size"],
+            batch_size=self.hparams.valid["batch_size"],
             shuffle=False,
-            num_workers=self.config["valid"].get("num_workers", 10),
+            num_workers=self.hparams.valid.get("num_workers", 10),
             persistent_workers=True,
             pin_memory=True,
         )
         return dataloader
 
     def train_dataloader(self):
-        dataloader = torch.utils.data.DataLoader(
+        dataloader = DataLoader(
             self.train_dataset,
-            batch_size=self.config["train"]["batch_size"],
+            batch_size=self.hparams.train["batch_size"],
             shuffle=True,
-            num_workers=self.config["train"].get("num_workers", 10),
+            num_workers=self.hparams.train.get("num_workers", 10),
             persistent_workers=True,
             pin_memory=True,
             drop_last=True,
