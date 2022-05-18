@@ -1,0 +1,30 @@
+datamodule:
+  encoder: /notebook/temp/task2encoder.pkl
+  dataset_path: /notebook/temp/CASIA-HWDB_Train/Train
+  valid:
+    batch_size: 1024
+    num_workers: 10
+  train:
+    batch_size: 1024
+    num_workers: 8
+
+module:
+  backbone: resnet34
+  feature_size: 512
+  num_classes: 7330
+  monitor_metric: val_loss
+  monitor_mode: min
+
+trainer:
+  gpus: -1
+  accelerator: "gpu"
+  precision: 32
+  benchmark: True
+  max_epochs: 50
+#  fast_dev_run: True
+  accumulate_grad_batches: 2
+
+
+logging:
+  logdir: resnset34
+  experiment_name: arcface
