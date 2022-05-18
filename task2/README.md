@@ -1,5 +1,11 @@
 # Задание 2: распознавание рукописных китайских иероглифов
 
+## Solution
+1. unzip data
+2. (Training) change `datamodule.encoder` and `datamodule.dataset_path` in `src/config-arcface.yaml`
+3. (Training) `python3 -m src.arcface.train -d src/config-arcface.yaml`
+4. (Infer) `python3 -m src.arcface.predict --ckpt <path/to/ckpt> --encoder <path/to/encoder> --test <path/to/test/root> --pred <path/to/dump/pred.txt>`
+
 ## Описание
 
 Предлагается реализовать и протестировать обучаемое распознавание символов на примере датасета `CASIA Offline Chinese Handwriting`
