@@ -2,6 +2,7 @@ import torch
 from torch.utils.data import DataLoader
 from argparse import ArgumentParser, Namespace
 from tqdm import tqdm
+from loguru import logger
 
 from .lightning import LightningModel
 from .data import TestDataset
@@ -25,6 +26,7 @@ def main(args: Namespace):
     test_loader = DataLoader(
         test_dataset, batch_size=2048, shuffle=False, num_workers=10
     )
+    logger.info("Data is ready")
     model = LightningModel.load_from_checkpoint(args.ckpt, map_location="cpu")
     device = (
         torch.device("cuda:0")
@@ -33,6 +35,7 @@ def main(args: Namespace):
     )
     model.eval()
     model.to(device)
+    logger.info("Model loaded")
 
     preds = []
     model.eval()

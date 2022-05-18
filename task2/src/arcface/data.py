@@ -62,7 +62,7 @@ class TestDataset(torch.utils.data.Dataset):
         return os.path.sep.join(self.paths[item].rsplit(os.path.sep, 3)[-3:])
 
     def get_class_by_idx(self, idx):
-        return self.encoder.inverse_transform([idx])
+        return self.encoder.inverse_transform([idx])[0]
 
     def __getitem__(self, item):
         path = self.paths[item]
