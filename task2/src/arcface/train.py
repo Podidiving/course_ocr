@@ -47,7 +47,7 @@ def main(config: Dict[str, Any]) -> None:
             monitor="val_loss",
             save_last=True,
             save_top_k=1,
-            mode="max",
+            mode="min",
             auto_insert_metric_name=False,
         ),
     ]
