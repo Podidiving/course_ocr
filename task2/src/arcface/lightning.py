@@ -56,8 +56,8 @@ class LightningModel(pl.LightningModule):
 
     def configure_optimizers(self):
         params = list(self.model.parameters()) + list(self.margin.parameters())
-        opt_name = self.hparams.optimizer.name
-        opt_params = self.hparams.optimizer.params
+        opt_name = self.hparams.optimizer["name"]
+        opt_params = self.hparams.optimizer["params"]
         opt = torch.optim.__dict__[opt_name](
             params, **opt_params
         )
