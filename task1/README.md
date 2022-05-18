@@ -1,5 +1,5 @@
 # Solution
-https://drive.google.com/drive/folders/1CeSCqgB5SOLSzPwGcD8m__ZXuKKDXujp?usp=sharing
+checkpoint: https://drive.google.com/drive/folders/1CeSCqgB5SOLSzPwGcD8m__ZXuKKDXujp?usp=sharing
 
 1. установить пакет `course_ocr/task1`: `pip install -e .`
 2. установить зависимости: `pip install -r src/requirements.txt`
