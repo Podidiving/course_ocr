@@ -38,7 +38,6 @@ def main(args: Namespace):
     logger.info("Model loaded")
 
     preds = []
-    model.eval()
     with torch.no_grad():
         for batch in tqdm(test_loader):
             x = batch["image"]
