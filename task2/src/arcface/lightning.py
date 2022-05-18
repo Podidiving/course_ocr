@@ -58,9 +58,7 @@ class LightningModel(pl.LightningModule):
         params = list(self.model.parameters()) + list(self.margin.parameters())
         opt_name = self.hparams.optimizer["name"]
         opt_params = self.hparams.optimizer["params"]
-        opt = torch.optim.__dict__[opt_name](
-            params, **opt_params
-        )
+        opt = torch.optim.__dict__[opt_name](params, **opt_params)
         if "lr_scheduler" in self.hparams:
             lr_params = self.hparams.lr_scheduler["params"]
         else:

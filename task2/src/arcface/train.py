@@ -43,7 +43,7 @@ def main(config: Dict[str, Any]) -> None:
     callbacks = [
         ModelCheckpoint(
             dirpath=log_path,
-            filename=config["logging"]["experiment_name"] + "-{epoch:02d}",
+            filename=config["logging"]["experiment_name"] + "best",
             monitor="val_loss",
             save_last=True,
             save_top_k=1,
