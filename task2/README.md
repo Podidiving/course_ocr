@@ -1,4 +1,5 @@
 # Задание 2: распознавание рукописных китайских иероглифов
+checkpoint: drivehttps://drive.google.com/drive/folders/1CeSCqgB5SOLSzPwGcD8m__ZXuKKDXujp?usp=sharing
 
 ## Solution
 1. unzip data
