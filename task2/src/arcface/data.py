@@ -134,6 +134,9 @@ class TrainDatamodule(pl.LightningDataModule):
         self.valid_dataset = None
 
     def prepare_data(self) -> None:
+        pass
+
+    def setup(self, stage: Optional[str] = None) -> None:
         all_paths = glob.glob(
             os.path.join(self.hparams.dataset_path, "*/*.png")
         )
@@ -142,8 +145,6 @@ class TrainDatamodule(pl.LightningDataModule):
         )
         self.valid = np.array(self.valid)
         self.train = np.array(self.train)
-
-    def setup(self, stage: Optional[str] = None) -> None:
         self.train_dataset = Dataset(self.train, self.hparams.encoder)
         self.valid_dataset = Dataset(
             self.valid, self.hparams.encoder, is_test=True
